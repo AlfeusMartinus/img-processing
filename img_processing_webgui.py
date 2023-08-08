@@ -1,18 +1,19 @@
-import streamlit as st
+import os
+
 import cv2
 import numpy as np
+import streamlit as st
 from natsort import natsorted
-import os
-from scipy import ndimage
-from skimage import io, feature, transform, filters 
+from skimage import filters
 
 st.set_page_config(page_title="Image-Comparison Example", layout="centered")
 
 st.title("Image Processing Functions")
 
 # Let the user select the image they want to use
-image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg", "tif", "tiff"])
+image = st.file_uploader("Upload an image...", type=["jpg", "png", "jpeg", "tif", "tiff"])
 if image is None: st.info("Please upload an image file."); st.stop()
+if image.size > 5000000: st.info("Please upload an image file smaller than 5MB."); st.stop()
 
 image = cv2.imdecode(np.frombuffer(image.read(), np.uint8), 1)
 # Delete any existing image.png file and altered.png file
@@ -20,7 +21,6 @@ try: os.remove("image.png")
 except: pass
 try: os.remove("altered.png")
 except: pass
-
 
 with st.form(key='my_form', clear_on_submit=False):
     st.subheader("Settings")
@@ -84,7 +84,28 @@ with st.form(key='my_form', clear_on_submit=False):
         with col2: step_size = st.slider('Step Size', 0, 100, 50)
 
     # Add a submit button
-    submit_button = st.form_submit_button(label='Initialize')
+    submit_button = st.form_submit_button(label='Initialize / Update Image')
+
+# Explain each of the image processing functions
+with st.expander("ℹ️ Glossary 📖"):
+    st.markdown("""
+    - **AWB** - Automatic White Balance (https://stackoverflow.com/questions/46390779/automatic-white-balancing-with-grayworld-assumption)
+    - **AWB_custom** - Custom White Balance
+    - **Blur** - Blur the image using a Gaussian filter (https://docs.opencv.org/4.x/d4/d13/tutorial_py_filtering.html)
+    - **Brightness** - Increase or decrease the image brightness (https://docs.opencv.org/3.4/d3/dc1/tutorial_basic_linear_transform.html)
+    - **CLAHE** - Contrast Limited Adaptive Histogram Equalization (https://docs.opencv.org/4.x/d5/daf/tutorial_py_histogram_equalization.html)
+    - **Contrast** - Increase or decrease the image contrast (https://docs.opencv.org/3.4/d3/dc1/tutorial_basic_linear_transform.html)
+    - **Denoise** - Denoise the image using a bilateral filter (https://scikit-image.org/docs/stable/auto_examples/filters/plot_denoise.html)
+    - **Gamma** - Gamma Correction (https://docs.opencv.org/3.4/d3/dc1/tutorial_basic_linear_transform.html)
+    - **Grayscale** - Convert the image to grayscale (https://docs.opencv.org/3.4/de/d25/imgproc_color_conversions.html)
+    - **Saturation** - Increase or decrease the image saturation (https://docs.opencv.org/3.4/d3/dc1/tutorial_basic_linear_transform.html)
+    - **Sharpness** - Increase or decrease the image sharpness (https://docs.opencv.org/3.4/d3/dc1/tutorial_basic_linear_transform.html)
+    - **Remove-Background** - Remove the background from the image (https://pypi.org/project/rembg/)
+    - **Sobel_Vertical** - Sobel Vertical Edge Detection (https://docs.opencv.org/3.4/d2/d2c/tutorial_sobel_derivatives.html)
+    - **Sobel_Horizontal** - Sobel Horizontal Edge Detection (https://docs.opencv.org/3.4/d2/d2c/tutorial_sobel_derivatives.html)
+    - **Tile-Plakakia** - Tile the image into smaller images (https://www.github.com/kalfasyan/plakakia)
+    """)
+
 
 if submit_button:
     # Crop the image
@@ -177,6 +198,7 @@ if submit_button:
     if "Remove-Background" in options:
         # Use the rembg library to remove the background
         import rembg
+
         # use a slider to adjust the alpha matting
         image = rembg.remove(image, alpha_matting=alpha_matting, alpha_matting_foreground_threshold=fg_threshold, alpha_matting_background_threshold=bg_threshold)
     if "Tile-Plakakia" in options:
