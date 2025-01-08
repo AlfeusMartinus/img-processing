@@ -1,12 +1,22 @@
 import os
-
 import cv2
 import numpy as np
 import streamlit as st
 from natsort import natsorted
 from skimage import filters
 
-st.set_page_config(page_title="Image-Comparison Example", layout="centered")
+# Set page configuration
+st.set_page_config(page_title="Image-Processing Tugas", layout="centered")
+
+# Display the title and the logo
+st.title("Linear Algebra")
+st.image("logo.png", width=100)  # Replace with the path to your campus logo image
+
+# Display the team members
+st.subheader("Team Members")
+team_members = ["Name : Bunga Gembira"]
+for member in team_members:
+    st.write(member)
 
 st.title("Image Processing Functions")
 

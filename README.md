@@ -19,7 +19,7 @@ To run this application locally, follow these steps:
 5. Run the Streamlit app using the following command: 
 
    ```bash
-   streamlit run image_processing_functions.py
+   streamlit run img_processing_webgui.py
 6. The Streamlit app will open in a web browser, allowing you to upload an image and adjust various image processing settings.
 
 ## Features
@@ -81,10 +81,3 @@ This Streamlit application offers the following features for image processing:
 6. **View:** Compare processed image to original using "Before/After" tool.
 
 7. **Experiment:** Try different settings for desired effects.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Contact
-Yannis Kalfas - [kalfasyan](mailto:kalfasyan@gmail.com)
