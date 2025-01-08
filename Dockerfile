@@ -8,7 +8,12 @@ WORKDIR /app
 COPY . /app
 
 # Install any needed packages specified in requirements.txt
-RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 -y
+
+# Install scikit-image
+RUN pip install scikit-image
+
+# Install other dependencies from requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Expose port 8501 for Streamlit
